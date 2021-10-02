@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Assets/UI/MainUI.uss?fileID=7433441132597879392&amp;guid=becad5b76b613b04b9cb3dda40c6b36d&amp;type=3#MainUI" />
+    <ui:VisualElement name="ui-container" class="ui-container">
+        <ui:Label display-tooltip-when-elided="true" name="interactable-name" class="interactable-name" />
+        <ui:VisualElement name="interaction-options" class="interaction-options">
+            <ui:Label text="Interact" display-tooltip-when-elided="true" name="option-interact" class="interaction-option" />
+            <ui:Label text="Give to Baby" display-tooltip-when-elided="true" name="option-give" class="interaction-option" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
