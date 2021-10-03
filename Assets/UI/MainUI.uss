@@ -1,7 +1,7 @@
 :root {
     font-size: 15px;
     -unity-text-align: middle-center;
-    -unity-font-definition: url('../Fonts/NovaRound-Regular.asset');
+    -unity-font-definition: url('project://database/Assets/Fonts/NovaRound-Regular.asset?fileID=11400000&guid=85f80ca14e341a6488e34fecf2458e80&type=2#NovaRound-Regular');
 }
 
 .interaction-container {
@@ -50,11 +50,21 @@
     height: 40px;
     padding: 0 20px;
     font-size: 30px;
-    background-color: rgba(255, 255, 255, 0.5);
     border-radius: 0 0 0 20px;
+    background-color: rgba(255, 255, 255, 0.5);
 }
 
 .timer {
     -unity-text-align: middle-right;
     width: 100px;
+}
+
+.version-tag {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    height: 20px;
+    padding: 0 10px;
+    border-radius: 10px 0 0 0;
+    background-color: rgba(255, 255, 255, 0.5);
 }
