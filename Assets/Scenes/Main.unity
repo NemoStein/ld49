@@ -3702,6 +3702,9 @@ MonoBehaviour:
   - {fileID: 1050063659}
   - {fileID: 873781492}
   - {fileID: 1376048826}
+  TimeScale: 1.8
+  DayStart: 8
+  DayEnd: 17
 --- !u!4 &617102910
 Transform:
   m_ObjectHideFlags: 0

@@ -55,4 +55,6 @@
 }
 
 .timer {
+    -unity-text-align: middle-right;
+    width: 100px;
 }
