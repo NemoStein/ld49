@@ -12,6 +12,8 @@ public class GameControllet : MonoBehaviour
     public float DayEnd = 17f;
     float CurrentTime;
 
+    bool Interacting;
+
     Interactable SelectedInteractable;
     VisualElement InteractionContainer;
     TextElement InteractableName;
@@ -36,6 +38,10 @@ public class GameControllet : MonoBehaviour
     void Start()
     {
         CurrentTime = DayStart * 60;
+        foreach (var interactable in Interactables)
+        {
+            interactable.UpdateTime(DayStart, true);
+        }
     }
 
     void Update()
@@ -46,14 +52,30 @@ public class GameControllet : MonoBehaviour
             Debug.Log("It's over");
         }
 
-        int hour = (int) CurrentTime / 60;
-        int minute = (int) CurrentTime % 60;
+        foreach (var interactable in Interactables)
+        {
+            interactable.UpdateTime(CurrentTime / 60);
+            var random = Random.value / (TimeScale * Time.deltaTime);
+            var chance = interactable.GetActivationChance();
+            if (random < chance)
+            {
+                interactable.Activate();
+            }
+        }
+
+        int hour = (int)CurrentTime / 60;
+        int minute = (int)CurrentTime % 60;
 
         TimerLabel.text = $"<mspace=18px>{hour:D2}h{minute:D2}";
     }
 
     void SelectAction(InputAction.CallbackContext context)
     {
+        if (Interacting)
+        {
+            return;
+        }
+
         if (SelectedInteractable != null)
         {
             SelectedInteractable.Deselect();
@@ -69,31 +91,50 @@ public class GameControllet : MonoBehaviour
             index = Interactables.Length - 1;
         }
 
-        SelectedInteractable = Interactables[index];
-        SelectedInteractable.Select();
-
-        InteractionContainer.RemoveFromClassList("hide");
-        InteractableName.text = SelectedInteractable.Name;
-
+        Select(Interactables[index]);
         currentInteractable = index;
     }
 
     void InteractAction(InputAction.CallbackContext context)
     {
-        InteractionContainer.AddToClassList("hide");
         if (SelectedInteractable != null)
         {
-            SelectedInteractable.Interact();
+            Interacting = !Interacting;
+
+            if (Interacting)
+            {
+                SelectedInteractable.Interact();
+            }
+            else
+            {
+                SelectedInteractable.Release();
+                Deselect();
+            }
         }
     }
 
     void GiveAction(InputAction.CallbackContext context)
     {
-        InteractionContainer.AddToClassList("hide");
-        if (SelectedInteractable != null)
+        if (SelectedInteractable != null && !Interacting)
         {
             SelectedInteractable.Give();
+            Deselect();
         }
+    }
+
+    void Select(Interactable interactable)
+    {
+        SelectedInteractable = interactable;
+        SelectedInteractable.Select();
+
+        InteractionContainer.RemoveFromClassList("hide");
+        InteractableName.text = SelectedInteractable.Name;
+    }
+
+    void Deselect()
+    {
+        SelectedInteractable = null;
+        InteractionContainer.AddToClassList("hide");
     }
 
     void OnEnable()
