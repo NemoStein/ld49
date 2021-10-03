@@ -37,7 +37,12 @@ public abstract class Interactable : MonoBehaviour
 
     public void Interact()
     {
+        Deselect();
+    }
 
+    public void Give()
+    {
+        Deselect();
     }
 
     public void Select()

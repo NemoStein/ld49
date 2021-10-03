@@ -1,37 +1,35 @@
-.ui-container {
-    height: 100%;
-    width: 100%;
-    align-items: center;
-    opacity: 1;
-    transition-property: opacity;
-    transition-duration: 0.2s;
-    transition-timing-function: ease-in-out;
+:root {
+    font-size: 15px;
+    -unity-text-align: middle-center;
+    -unity-font-definition: url('../Fonts/NovaRound-Regular.asset');
 }
 
-.ui-container.hide {
+.interaction-container {
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding-top: 10px;
+    opacity: 1;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.interaction-container.hide {
     opacity: 0;
 }
 
 .interactable-name {
-    font-size: 32px;
-    color: rgb(255, 255, 255);
-    -unity-text-align: upper-center;
-    background-color: rgb(255, 255, 255);
-    align-items: center;
-    border-bottom-left-radius: 25px;
-    border-top-right-radius: 25px;
+    width: 400px;
+    height: 60px;
+    font-size: 40px;
+    border-radius: 0 30px;
     color: rgb(255, 255, 255);
     background-color: rgba(255, 255, 255, 0.5);
-    width: 300px;
-    transition-property: all;
-    transition-duration: 0.2s;
-    transition-timing-function: ease-in-out;
+    transition: all 0.2s ease-in-out;
 }
 
-.ui-container.hide .interactable-name {
-    border-bottom-left-radius: 5px;
-    border-top-right-radius: 5px;
+.interaction-container.hide .interactable-name {
     width: 0;
+    border-radius: 0 20px;
 }
 
 .interaction-options {
@@ -39,11 +37,22 @@
 }
 
 .interaction-option {
-    -unity-text-align: upper-center;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.5);
+    height: 20px;
     padding: 0 20px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.timer-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 40px;
+    padding: 0 20px;
+    font-size: 30px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 0 0 0 20px;
+}
+
+.timer {
 }

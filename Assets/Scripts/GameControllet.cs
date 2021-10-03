@@ -8,7 +8,7 @@ public class GameControllet : MonoBehaviour
     public InputActions InputActions;
 
     Interactable SelectedInteractable;
-    VisualElement UIContainer;
+    VisualElement InteractionContainer;
     TextElement InteractableName;
 
     int currentInteractable = -1;
@@ -17,8 +17,8 @@ public class GameControllet : MonoBehaviour
     {
         UIDocument document = GetComponent<UIDocument>();
         InteractableName = document.rootVisualElement.Query<TextElement>("interactable-name").First();
-        UIContainer = document.rootVisualElement.Query<VisualElement>("ui-container").First();
-        UIContainer.AddToClassList("hide");
+        InteractionContainer = document.rootVisualElement.Query<VisualElement>("interaction-container").First();
+        InteractionContainer.AddToClassList("hide");
 
         InputActions = new InputActions();
         InputActions.Gameplay.Select.performed += SelectAction;
@@ -46,7 +46,7 @@ public class GameControllet : MonoBehaviour
         SelectedInteractable = Interactables[index];
         SelectedInteractable.Select();
 
-        UIContainer.RemoveFromClassList("hide");
+        InteractionContainer.RemoveFromClassList("hide");
         InteractableName.text = SelectedInteractable.Name;
 
         currentInteractable = index;
@@ -54,17 +54,19 @@ public class GameControllet : MonoBehaviour
 
     void InteractAction(InputAction.CallbackContext context)
     {
-        UIContainer.AddToClassList("hide");
-        if (SelectedInteractable != null) {
-            SelectedInteractable.Deselect();
+        InteractionContainer.AddToClassList("hide");
+        if (SelectedInteractable != null)
+        {
+            SelectedInteractable.Interact();
         }
     }
 
     void GiveAction(InputAction.CallbackContext context)
     {
-        UIContainer.AddToClassList("hide");
-        if (SelectedInteractable != null) {
-            SelectedInteractable.Deselect();
+        InteractionContainer.AddToClassList("hide");
+        if (SelectedInteractable != null)
+        {
+            SelectedInteractable.Give();
         }
     }
 
