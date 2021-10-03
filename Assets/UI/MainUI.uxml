@@ -1,17 +1,32 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <Style src="project://database/Assets/UI/MainUI.uss?fileID=7433441132597879392&amp;guid=becad5b76b613b04b9cb3dda40c6b36d&amp;type=3#MainUI" />
-    <ui:VisualElement name="interaction-container" class="interaction-container">
-        <ui:Label name="interactable-name" class="interactable-name" />
-        <ui:VisualElement name="interaction-options" class="interaction-options">
-            <ui:Label text="Interact" name="option-interact" class="interaction-option" />
-            <ui:Label text="Give to Baby" name="option-give" class="interaction-option" />
+    <ui:VisualElement name="menu-state" class="state menu-state">
+        <ui:VisualElement class="game-name">
+            <ui:Label text="A Day In The Office" />
+        </ui:VisualElement>
+        <ui:VisualElement class="start-game">
+            <ui:Label text="Press [Space] to start your day" />
         </ui:VisualElement>
     </ui:VisualElement>
-    <ui:VisualElement name="timer-container" class="timer-container">
-        <ui:Label name="timer" class="timer" />
+    <ui:VisualElement name="gameplay-state" class="state gameplay-state">
+        <ui:VisualElement name="timer-container" class="timer-container">
+            <ui:Label name="timer" class="timer" />
+        </ui:VisualElement>
+        <ui:VisualElement name="interaction-container" class="interaction-container">
+            <ui:Label name="interactable-name" class="interactable-name" />
+            <ui:VisualElement name="interaction-options" class="interaction-options">
+                <ui:Label text="Interact" name="option-interact" class="interaction-option" />
+                <ui:Label text="Give to Baby" name="option-give" class="interaction-option" />
+            </ui:VisualElement>
+        </ui:VisualElement>
     </ui:VisualElement>
-    <ui:VisualElement style="position: absolute; left: 0; top: 0; right: 0; bottom: 0;" />
+    <ui:VisualElement name="endgame-state" class="state endgame-state show">
+        <ui:VisualElement class="endgame-background">
+            <ui:Label text="The day is finally over!" class="endgame-title" />
+            <ui:Label text="But I don&apos;t know if you were fired or not (or even if you did your work) because I didn&apos;t manage to finish this game... Sorry =[" class="endgame-message" />
+        </ui:VisualElement>
+    </ui:VisualElement>
     <ui:VisualElement name="version-tag" class="version-tag">
-        <ui:Label text="LD49 Unstable - v0.1.0" display-tooltip-when-elided="false" style="font-size: 10px;" />
+        <ui:Label text="LD49 Unstable - v0.1.0" />
     </ui:VisualElement>
 </ui:UXML>

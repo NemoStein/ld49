@@ -12,21 +12,31 @@ public class GameControllet : MonoBehaviour
     public float DayEnd = 17f;
     float CurrentTime;
 
-    bool Interacting;
+    GameState CurrentGameState;
 
+    bool Interacting;
+    int currentInteractable = -1;
     Interactable SelectedInteractable;
+
+    VisualElement MenuState;
+    VisualElement GameplayState;
+    VisualElement EndgameState;
     VisualElement InteractionContainer;
     TextElement InteractableName;
     TextElement TimerLabel;
 
-    int currentInteractable = -1;
-
     void Awake()
     {
-        UIDocument document = GetComponent<UIDocument>();
-        InteractableName = document.rootVisualElement.Query<TextElement>("interactable-name").First();
-        TimerLabel = document.rootVisualElement.Query<TextElement>("timer").First();
-        InteractionContainer = document.rootVisualElement.Query<VisualElement>("interaction-container").First();
+        var document = GetComponent<UIDocument>();
+        var root = document.rootVisualElement;
+
+        MenuState = root.Query<VisualElement>("menu-state").First();
+        GameplayState = root.Query<VisualElement>("gameplay-state").First();
+        EndgameState = root.Query<VisualElement>("endgame-state").First();
+
+        InteractableName = GameplayState.Query<TextElement>("interactable-name").First();
+        TimerLabel = GameplayState.Query<TextElement>("timer").First();
+        InteractionContainer = GameplayState.Query<VisualElement>("interaction-container").First();
         InteractionContainer.AddToClassList("hide");
 
         InputActions = new InputActions();
@@ -37,6 +47,8 @@ public class GameControllet : MonoBehaviour
 
     void Start()
     {
+        ChangeGameState(GameState.Menu);
+
         CurrentTime = DayStart * 60;
         foreach (var interactable in Interactables)
         {
@@ -46,20 +58,23 @@ public class GameControllet : MonoBehaviour
 
     void Update()
     {
-        CurrentTime += TimeScale * Time.deltaTime;
-        if (CurrentTime > DayEnd * 60)
+        if (CurrentGameState == GameState.Gameplay)
         {
-            Debug.Log("It's over");
-        }
-
-        foreach (var interactable in Interactables)
-        {
-            interactable.UpdateTime(CurrentTime / 60);
-            var random = Random.value / (TimeScale * Time.deltaTime);
-            var chance = interactable.GetActivationChance();
-            if (random < chance)
+            CurrentTime += TimeScale * Time.deltaTime;
+            if (CurrentTime > DayEnd * 60)
             {
-                interactable.Activate();
+                ChangeGameState(GameState.Endgame);
+            }
+
+            foreach (var interactable in Interactables)
+            {
+                interactable.UpdateTime(CurrentTime / 60);
+                var random = Random.value / (TimeScale * Time.deltaTime);
+                var chance = interactable.GetActivationChance();
+                if (random < chance)
+                {
+                    interactable.Activate();
+                }
             }
         }
 
@@ -97,6 +112,12 @@ public class GameControllet : MonoBehaviour
 
     void InteractAction(InputAction.CallbackContext context)
     {
+        if (CurrentGameState == GameState.Menu)
+        {
+            ChangeGameState(GameState.Gameplay);
+            return;
+        }
+
         if (SelectedInteractable != null)
         {
             Interacting = !Interacting;
@@ -146,4 +167,38 @@ public class GameControllet : MonoBehaviour
     {
         InputActions.Disable();
     }
+
+    void ChangeGameState(GameState state)
+    {
+        CurrentGameState = state;
+        VisualElement stateUI;
+
+        switch (state)
+        {
+            case GameState.Menu:
+                stateUI = MenuState;
+                break;
+            case GameState.Gameplay:
+                stateUI = GameplayState;
+                break;
+            case GameState.Endgame:
+                stateUI = EndgameState;
+                break;
+            default:
+                throw new System.Exception("How??");
+        }
+
+        MenuState.RemoveFromClassList("show");
+        GameplayState.RemoveFromClassList("show");
+        EndgameState.RemoveFromClassList("show");
+
+        stateUI.AddToClassList("show");
+    }
+}
+
+enum GameState
+{
+    Menu,
+    Gameplay,
+    Endgame,
 }
