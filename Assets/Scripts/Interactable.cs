@@ -1,104 +1,45 @@
 using System.Collections;
 using UnityEngine;
 
-public abstract class Interactable : MonoBehaviour
+public class Interactable : MonoBehaviour
 {
     public string Name;
+    public Animator Animator;
 
-    readonly float SelectionDuration = 0.25f;
-    Coroutine SelectionAnimating;
-
-    Vector3 TargetPosition;
-    Quaternion TargetRotation;
-    Vector3 TargetScale;
-
-    Vector3 InitialPosition;
-    Quaternion InitialRotation;
-    Vector3 InitialScale;
-
-    Vector3 FinalPosition;
-    Quaternion FinalRotation;
-    Vector3 FinalScale;
-
-    protected abstract Vector3 GetFinalPosition();
-    protected abstract Quaternion GetFinalRotation();
-    protected abstract Vector3 GetFinalScale();
-
-    void Start()
-    {
-        InitialPosition = transform.position;
-        InitialRotation = transform.rotation;
-        InitialScale = transform.localScale;
-
-        FinalPosition = GetFinalPosition();
-        FinalRotation = GetFinalRotation();
-        FinalScale = GetFinalScale();
-    }
+    protected string SelectState = "Select";
+    protected string DeselectState = "Deselect";
+    protected string InteractState = "Interact";
+    protected string ReleaseState = "Release";
+    protected string GiveState = "Give";
+    protected string TakeState = "Take";
 
     public void Interact()
     {
-        Deselect();
+        Animator.CrossFade(InteractState, 1f);
+    }
+
+    public void Release()
+    {
+        Animator.Play(ReleaseState);
     }
 
     public void Give()
     {
-        Deselect();
+        Animator.Play(GiveState);
+    }
+
+    public void Take()
+    {
+        Animator.Play(TakeState);
     }
 
     public void Select()
     {
-        TargetPosition = FinalPosition;
-        TargetRotation = FinalRotation;
-        TargetScale = FinalScale;
-
-        SelectionAnimating = StartCoroutine(SelectionAnimation());
+        Animator.Play(SelectState);
     }
 
     public void Deselect()
     {
-        TargetPosition = InitialPosition;
-        TargetRotation = InitialRotation;
-        TargetScale = InitialScale;
-
-        SelectionAnimating = StartCoroutine(SelectionAnimation());
-    }
-
-    IEnumerator InteractionAnimation()
-    {
-        yield return null;
-    }
-
-    IEnumerator SelectionAnimation()
-    {
-        if (SelectionAnimating != null)
-        {
-            StopCoroutine(SelectionAnimating);
-        }
-
-        var initialPosition = transform.position;
-        var initialRotation = transform.rotation;
-        var initialScale = transform.localScale;
-
-        var time = 0f;
-        while (time < 1f)
-        {
-            time += 1 / SelectionDuration * Time.deltaTime;
-            var ease = EaseOutCubic(0, 1, time);
-
-            transform.position = Vector3.Lerp(initialPosition, TargetPosition, ease);
-            transform.rotation = Quaternion.Lerp(initialRotation, TargetRotation, ease);
-            transform.localScale = Vector3.Lerp(initialScale, TargetScale, ease);
-
-            yield return null;
-        }
-
-        SelectionAnimating = null;
-    }
-
-    static float EaseOutCubic(float start, float end, float value)
-    {
-        value--;
-        end -= start;
-        return end * (value * value * value + 1) + start;
+        Animator.Play(DeselectState);
     }
 }
